@@ -38,6 +38,18 @@ class MoviesController < ApplicationController
     redirect_to movies_path
   end
 
+  def similar
+    ret = Movie.find(params[:id])
+    @director = ret.director
+
+    if !@director.blank?
+      @movies = Movie.where(director: @director)
+    else
+      flash[:notice] = "'#{ret.title}' has no director info."
+      redirect_to movies_path and return
+    end
+  end
+
   private
   # Making "internal" methods private is not required, but is a common practice.
   # This helps make clear which methods respond to requests, and which ones do not.
